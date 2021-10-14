@@ -1,0 +1,16 @@
+<%- layout('./boilerplate/main') %> 
+
+<form action="/new" method="post">
+
+<label for="name" class="form-label">name</label>
+<input type="text" name="name" id="name" class="form-control">
+<label for="price" class="form-label">price</label>
+<input type="number" name="price" id="price" class="form-control">
+<label for="location" class="form-label">location</label>
+<input type="text" name="location" id="location" class="form-control">
+<label for="image" class="form-label">image</label>
+<input type="text" name="image" id="image" class="form-control">
+<label for="description" class="form-label">description</label>
+<textarea name="description" id="description" cols="30" rows="10" class="form-control"></textarea>
+<button>submit</button>
+</form>

@@ -1,0 +1,28 @@
+{
+  "name": "konectapp-1",
+  "version": "1.0.0",
+  "description": "koect app",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gratusrichard/konectapp.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gratusrichard/konectapp/issues"
+  },
+  "homepage": "https://github.com/gratusrichard/konectapp#readme",
+  "dependencies": {
+    "ejs": "^3.1.6",
+    "ejs-mate": "^3.0.0",
+    "express": "^4.17.1",
+    "method-override": "^3.0.0",
+    "mongoose": "^6.0.7",
+    "nodemon": "^2.0.13",
+    "path": "^0.12.7"
+  }
+}
