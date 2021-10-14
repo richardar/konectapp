@@ -56,12 +56,3 @@ app.post('/new', async (req,res) => {
 
 })
 
-app.get('/:id', async (req,res) => {
-    const {id = NaN} = req.params;
-    console.log(req.params)
-   console.log(id)
-    
-    const bids = await Bid.findById()
-    res.render(bids)
-
-})
