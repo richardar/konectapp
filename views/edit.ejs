@@ -1,0 +1,17 @@
+<%- layout('./boilerplate/main.ejs') %> 
+
+
+<form action="/bids/new" method="post">
+
+    <label for="name" class="form-label">name</label>
+    <input type="text" name="name" id="name" class="form-control" value="<%= bids.name %> ">
+    <label for="price" class="form-label" >price</label>
+    <input type="text" name="price" id="price" class="form-control" value="<%= bids.price %> ">
+    <label for="location" class="form-label">location</label>
+    <input type="text" name="location" id="location" class="form-control" value="<%= bids.location %> ">
+    <label for="image" class="form-label">image</label>
+    <input type="text" name="image" id="image" class="form-control" value="<%= bids.image %> ">
+    <label for="description" class="form-label">description</label>
+    <textarea name="description" id="description" cols="30" rows="10" class="form-control"><%= bids.description %> </textarea>
+    <button  class="btn btn-primary mt-3">submit</button>
+    </form>

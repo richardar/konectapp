@@ -1,6 +1,6 @@
 <%- layout('./boilerplate/main') %> 
 
-<form action="/new" method="post">
+<form action="/bids/new" method="post">
 
 <label for="name" class="form-label">name</label>
 <input type="text" name="name" id="name" class="form-control">
@@ -12,5 +12,5 @@
 <input type="text" name="image" id="image" class="form-control">
 <label for="description" class="form-label">description</label>
 <textarea name="description" id="description" cols="30" rows="10" class="form-control"></textarea>
-<button>submit</button>
+<button class="btn btn-primary mt-3">submit</button>
 </form>

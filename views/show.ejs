@@ -1,0 +1,80 @@
+<%- layout('./boilerplate/main') %> 
+
+<div class="row">
+
+<div class="col-6 offset-33">
+    <div class="card" style="width: 30rem;">
+        <img class="card-img-top" src="<%= bids.image %> " alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title"><%= bids.name %> </h5>
+          <p class="card-text"><%= bids.description %> </p>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item"><%= bids.specilization %> </li>
+          <li class="list-group-item"><%= bids.location %> </li>
+          <li class="list-group-item">max price <%= bids.price %> </li>
+        </ul>
+        <div class="card-body ">
+          <form class="d-inline" action="/bids/<%= bids._id %>?_method=DELETE" method="post">
+            <button class="btn btn-primary">Delete</button>
+        </form>
+            <a href="/bids/<%= bids._id %>/edit" class="btn btn-primary">Edit</a>
+            <form action="/bids/<%= bids._id %>/closebid" method="post" class="d-inline">
+            <button class="btn btn-warning">close</button></form>
+        
+    </div>
+           
+        </div>
+</div>
+
+<div class="col-6">
+
+    <% if (bids.isClosed) { %>
+     <div class="card">
+         <h3>this is closed</h3>
+         <h2>winner: <%= bids.highestBidder.highBidderName %> </h2>
+         <h2>price: <%= bids.highestBidder.highPrice %> </h2>
+
+     </div>
+    <% }  else {%>
+    
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title"><%= bids.highestBidder.highBidderName %> </h5>
+            <h5 class="card-title"><%= bids.highestBidder.highPrice %></h5>
+  </div>
+   </div>
+
+    <div class="card">
+        <form action="/bids/<%= bids._id %>/submitbid" method="post">
+            <label for="highBidderName">name</label>
+            <input type="text" name="highBidderName" id="highBidderName">
+            <label for="highPrice">enter your bid amount</label>
+            <% if (bids.highestBidder.highPrice) { %>
+                <input type="range"  name="highPrice" id="highPrice" max="<%= bids.highestBidder.highPrice %>" oninput="this.nextElementSibling.value = this.value">
+                <output>0</output>
+            <% } else { %>
+        
+        <input type="range"  name="highPrice" id="highPrice" max="<%= bids.highestBidder.price %>" oninput="this.nextElementSibling.value = this.value">
+        <output>24</output>
+        <% } %> 
+                <button>submit</button>
+        
+        
+        </form>
+
+    </div>
+    <div class="card">
+        <div class="card-title">previous bids here......</div>
+        <% for( let i = 0; i < bids.previousBidders.length; i++ ) { %>
+           <div class="card">
+               <ul>
+           <li class="list-group-item"> <%= bids.previousBidders[i].previousName %> </li>
+           <li class="list-group-item"> <%= bids.previousBidders[i].previousPrice %> </li>
+        </ul>
+        </div>
+        <% } %>
+    </div>
+
+<% } %> 
+</div>

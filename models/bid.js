@@ -6,12 +6,16 @@ const bidSchema = new mongoose.Schema({
     price : Number,
     description: String,
     location: String,
+    specilization: String,
     image: String,
     highestBidder: {
-      name: String,
-      highPrice: Number
+      highBidderName: String,
+      highPrice: Number,
      },
-     previousBidders: [{previousName: String , PreviousPrice: Number}]
+     previousBidders: [{previousName: String , previousPrice: Number}],
+     isClosed: {
+       type: Boolean,
+     }
      
 })
 

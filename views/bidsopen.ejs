@@ -2,8 +2,8 @@
 
 <% for( let i = 0; i < bids.length; i++ ) { %>
 
-
-<div class="card mt-10">
+<% if (!bids[i].isClosed) { %>
+  <div class="card mt-10">
     <div class="row">
         <div class="col-3">
   <img class="card-img" src="<%= bids[i].image %> " alt="">
@@ -13,10 +13,12 @@
     <h4 class="card-title"><%=  bids[i].name %> </h4>
     <p class="card-text"> <%=   bids[i].description %></p>
     <p class="card-text"><%= bids[i].location %> </p>
-    <a href="/<%= bids[i]._id %>" class="btn btn-primary btn-lg mt-5" >current bid : <%= bids[i].price %> </a>
+    <a href="/bids/<%= bids[i]._id %>" class="btn btn-primary btn-lg mt-5" >current bid : <%= bids[i].price %> </a>
 </div>
 </div>
 </div>
 </div>
+<% } %>
+
 <% } %>
 
