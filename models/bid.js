@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-
+const User = require('./Users')
 const bidSchema = new mongoose.Schema({
     
     name: String,
@@ -8,13 +8,26 @@ const bidSchema = new mongoose.Schema({
     location: String,
     specilization: String,
     image: String,
+    createdUser: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: User
+    },
     highestBidder: {
-      highBidderName: String,
+      highBidderName: {
+        _id: false,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: User
+      },
       highPrice: Number,
+      
      },
-     previousBidders: [{previousName: String , previousPrice: Number}],
+     previousBidders: [{previousName: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: User
+     } , previousPrice: Number}],
      isClosed: {
        type: Boolean,
+       enum:[true]
      }
      
 })

@@ -34,26 +34,26 @@
     <% if (bids.isClosed) { %>
      <div class="card">
          <h3>this is closed</h3>
-         <h2>winner: <%= bids.highestBidder.highBidderName %> </h2>
+         <h2>winner: <%= bids.highestBidder.highBidderName.username %> </h2>
          <h2>price: <%= bids.highestBidder.highPrice %> </h2>
 
      </div>
     <% }  else {%>
+    <% if (bids.highestBidder.highBidderName) { %>
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title"><%= bids.highestBidder.highBidderName.username %> </h5>
+                <h5 class="card-title"><%= bids.highestBidder.highPrice %></h5>
+      </div>
+    <% } %>
     
-    <div class="card" style="width: 18rem;">
-        <div class="card-body">
-            <h5 class="card-title"><%= bids.highestBidder.highBidderName %> </h5>
-            <h5 class="card-title"><%= bids.highestBidder.highPrice %></h5>
-  </div>
    </div>
 
     <div class="card">
         <form action="/bids/<%= bids._id %>/submitbid" method="post">
-            <label for="highBidderName">name</label>
-            <input type="text" name="highBidderName" id="highBidderName">
             <label for="highPrice">enter your bid amount</label>
             <% if (bids.highestBidder.highPrice) { %>
-                <input type="range"  name="highPrice" id="highPrice" max="<%= bids.highestBidder.highPrice %>" oninput="this.nextElementSibling.value = this.value">
+                <input type="range"  name="highPrice" id="highPrice" value="<%= bids.highestBidder.highPrice %>" max="<%= bids.highestBidder.highPrice %>" oninput="this.nextElementSibling.value = this.value">
                 <output><%= bids.highestBidder.highPrice %></output>
             <% } else { %>
         
@@ -66,15 +66,22 @@
         </form>
 
     </div>
-    <div class="card">
-        <div class="card-title">previous bids here......</div>
+
+   
+     
+        <h2>previousBidders</h2>
+        <% if(bids.previousBidders.length) {%> 
+       
         <% for( let i = 0; i < bids.previousBidders.length; i++ ) { %>
+
+            
            <div class="card">
                <ul>
-           <li class="list-group-item"> <%= bids.previousBidders[i].previousName %> </li>
+           <li class="list-group-item"> <%= bids.previousBidders[i].previousName.username %> </li>
            <li class="list-group-item"> <%= bids.previousBidders[i].previousPrice %> </li>
         </ul>
-        </div>
+        <% } %> 
+        
         <% } %>
     </div>
 
