@@ -6,7 +6,16 @@ const path = require('path')
 const Bid = require('./models/bid')
 const { resourceLimits } = require('worker_threads')
 const bid = require('./models/bid')
-
+const appError = require('./utils/appError')
+const {formValidation} = require('./joiValidation/validationSchema')
+const session = require('express-session')
+const flash = require('express-flash')
+const {bidsRouter} = require('./routes/bids')
+const passport = require('passport')
+const localStatergy = require('passport-local')
+const User = require('./models/Users')
+const {userRouter} = require('./routes/users')
+const {cardsRouter} = require('./routes/cards')
 
 const app = express();
 
@@ -20,6 +29,41 @@ mongoose.connect('mongodb://localhost:27017/konect').then(() => {
     console.log('cannot open the connection to mongoose for some reason')
 })
 
+//session configuration
+app.use(
+    require("express-session")({
+      secret: "shibas are the best dogs in the world.",
+      resave: false,
+      saveUninitialized: false
+    })
+  );
+  
+  //flash configuration
+  app.use(flash())
+
+  
+//passport configuration
+passport.use(new localStatergy(User.authenticate()))
+app.use(passport.initialize());
+  app.use(passport.session());
+  passport.serializeUser(User.serializeUser())
+  passport.deserializeUser(User.deserializeUser())
+
+
+//setting up res.locals
+app.use((req,res,next) =>{
+
+res.locals.success = req.flash('success')
+res.locals.error = req.flash('error')
+res.locals.isUser = req.user
+next()
+
+})
+
+//setting static file
+
+app.use(express.static('./public'))
+
 //url parser
 app.use(express.urlencoded({extended: true}))
 
@@ -30,103 +74,32 @@ app.engine('ejs', engine);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs')
 
+
+// setting up routes
+
+app.use('/bids',bidsRouter)
+app.use('/user', userRouter)
+app.use('/cards', cardsRouter)
 //listen to incoming connection
 
 app.listen(3000, () => {
     console.log("started to listen on the port 3000")
 })
 
+app.get('/', (req,res) => {
 
-app.get('/bidsopen', async (req,res) => {
-    const bids = await Bid.find({})
-
-    res.render('bidsopen', {bids})
+    res.send('not yet done')
 })
 
+app.get('*', (req,res) => {
 
-app.get('/bidsall', async (req,res) => {
-    const bids = await Bid.find({})
-    res.render('bidsall', {bids})
+    res.render('notfound')
 })
 
-app.get('/bids/new', (req,res) => {
-    res.render('new')
-})
+app.use((err,req,res,next)=> {
 
-app.post('/bids/new', async (req,res) => {
-    const body = req.body;
+    const { statusCode = 500 } = err;
+    if (!err.message) err.message = 'Oh No, Something Went Wrong!'
+    res.status(statusCode).render('error', { err })
 
-    const bids = new Bid(req.body)
-   await bids.save()
-    res.redirect(`/bids/${bids._id}`)
-
-
-
-})
-
-app.get('/bids/:id' , async (req,res) => {
-
-    const id = req.params.id;
-    const bids = await Bid.findById(id)
-
-   res.render('show', {bids})
-})
-
-app.delete('/bids/:id', async (req,res) => {
-
-    const id = req.params.id;
-    const bids = await Bid.findByIdAndDelete(id)
-res.redirect('/bids')
-
-})
-
-
-app.get('/bids/:id/edit', async (req,res) => {
-    const id = req.params.id;
-    const bids = await Bid.findById(id)
-
-    res.render('edit',{bids})
-})
-// app.put('/bids/:id', (req,res) => {
-
-
-
-// })
-
-app.post('/bids/:id/submitbid', async (req,res) => {
-
-const id = req.params.id;
-const bids = await Bid.findById(id)
-
-if(bids.highestBidder){
-
-    const {highBidderName, highPrice} = req.body
-    const previousName = highBidderName
-    const previousPrice = highPrice
-    
-    bids.highestBidder = req.body
-
-    bids.previousBidders.push({previousName,previousPrice})
-
-    bids.save()
-
-}else{
-
-    bids.highestBiddeer = req.body
-    bids.save()
-}
-res.redirect(`/bids/${id}`)
-
-})
-
-
-
-app.post('/bids/:id/closebid',async (req,res) => {
-
-    const id = req.params.id
-    const bids = await Bid.findByIdAndUpdate(id, { $set: { previousBidders: [] }})
-    bids.isClosed = true
-    await bids.save()
-    res.redirect(`/bids/${id}`)
-    
 })

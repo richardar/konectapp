@@ -1,0 +1,18 @@
+<%- layout('./boilerplate/main.ejs') %> 
+
+<form action="/user/register" method="post">
+
+    <label for="username" class="form-label">enter username</label>
+    <input type="text" name="username" id="username" class="form-control">
+    <label for="email" class="form-label">enter your email</label>
+    <input type="email" name="email" id="email" class="form-control">
+    <label for="isProfessional">are you a professional</label>
+    <input type="radio" name="isProfessional" id="isProfessional" value="true"><br>
+    <label for="password" class="form-label">enter your password</label>
+    <input type="password" name="password" id="password" class="form-control">
+    <button class="btn btn-success"> submit
+    </button>
+    
+    
+
+</form>

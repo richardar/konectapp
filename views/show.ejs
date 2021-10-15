@@ -3,7 +3,7 @@
 <div class="row">
 
 <div class="col-6 offset-33">
-    <div class="card" style="width: 30rem;">
+    <div class="card shadow" style="width: 30rem;">
         <img class="card-img-top" src="<%= bids.image %> " alt="Card image cap">
         <div class="card-body">
           <h5 class="card-title"><%= bids.name %> </h5>
@@ -18,8 +18,10 @@
           <form class="d-inline" action="/bids/<%= bids._id %>?_method=DELETE" method="post">
             <button class="btn btn-primary">Delete</button>
         </form>
-            <a href="/bids/<%= bids._id %>/edit" class="btn btn-primary">Edit</a>
-            <form action="/bids/<%= bids._id %>/closebid" method="post" class="d-inline">
+        <form class="d-inline" action="/bids/<%= bids._id %>/edit">
+            <button class="btn btn-primary">edit</button>
+        </form>   
+                 <form action="/bids/<%= bids._id %>/closebid" method="post" class="d-inline">
             <button class="btn btn-warning">close</button></form>
         
     </div>
@@ -52,11 +54,11 @@
             <label for="highPrice">enter your bid amount</label>
             <% if (bids.highestBidder.highPrice) { %>
                 <input type="range"  name="highPrice" id="highPrice" max="<%= bids.highestBidder.highPrice %>" oninput="this.nextElementSibling.value = this.value">
-                <output>0</output>
+                <output><%= bids.highestBidder.highPrice %></output>
             <% } else { %>
         
-        <input type="range"  name="highPrice" id="highPrice" max="<%= bids.highestBidder.price %>" oninput="this.nextElementSibling.value = this.value">
-        <output>24</output>
+        <input type="range"  name="highPrice" id="highPrice" max="<%= bids.price %>" oninput="this.nextElementSibling.value = this.value">
+        <output><%= bids.price %> </output>
         <% } %> 
                 <button>submit</button>
         

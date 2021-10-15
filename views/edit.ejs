@@ -1,17 +1,20 @@
 <%- layout('./boilerplate/main.ejs') %> 
 
 
-<form action="/bids/new" method="post">
+<form action="/bids/<%= bids._id %>/edit?_method=PUT" method="post" class="needs-validation" novalidate>
 
     <label for="name" class="form-label">name</label>
-    <input type="text" name="name" id="name" class="form-control" value="<%= bids.name %> ">
+    <input type="text" name="name" id="name" class="form-control" value="<%= bids.name %> " required>
     <label for="price" class="form-label" >price</label>
-    <input type="text" name="price" id="price" class="form-control" value="<%= bids.price %> ">
+    <input type="text" name="price" id="price" class="form-control" value="<%= bids.price %>" required>
     <label for="location" class="form-label">location</label>
-    <input type="text" name="location" id="location" class="form-control" value="<%= bids.location %> ">
+    <input type="text" name="location" id="location" class="form-control" value="<%= bids.location %> " required>
     <label for="image" class="form-label">image</label>
-    <input type="text" name="image" id="image" class="form-control" value="<%= bids.image %> ">
+    <input type="text" name="image" id="image" class="form-control" value="<%= bids.image %> " required>
     <label for="description" class="form-label">description</label>
-    <textarea name="description" id="description" cols="30" rows="10" class="form-control"><%= bids.description %> </textarea>
+    <textarea name="description" id="description" cols="30" rows="10" class="form-control" required><%= bids.description %> </textarea>
     <button  class="btn btn-primary mt-3">submit</button>
     </form>
+
+
+    <script src="/bootstrapvalidation.js"></script>
