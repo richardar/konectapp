@@ -4,7 +4,7 @@ const Bid = require('../models/bid')
 const appError = require('../utils/appError')
 const mongoose = require('mongoose')
 const route = express.Router()
-const {formValidation} = require('../joiValidation/validationSchema')
+const {formValidation,cardsValidation} = require('../joiValidation/validationSchema')
 const flash = require('express-flash')
 
 

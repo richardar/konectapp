@@ -1,0 +1,17 @@
+<% if (isUser) { %>
+
+    <% if(isUser.isProfessional) { %>  
+    <% if (!isUser.isCardCreated) { %>
+        <div class="alert alert-success alert-dismissible fade show " role="alert">
+            <div class="text-center">
+                 create a card right now so that other's can access your contact information
+                <a href="/cards/new" class="btn btn-success btn-sm ms">create Now</a></div>
+           
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+           </div>
+     
+    <% } %>
+
+    
+       <% } %> 
+<% } %>

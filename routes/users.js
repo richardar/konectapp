@@ -20,10 +20,20 @@ route.post('/register',async (req,res) => {
 
         const usr = new User({email,username,isProfessional})
         const registeredUser = await  User.register(usr,password)
+        req.login(registeredUser, function(err) {
+            if (err) { return next(err); }
+            return res.redirect('/users/' + req.user.username);
+          });
+        
     }
     else{
         const usr = new User({email,username})
         const registeredUser = await User.register(usr,password)
+        req.login(registeredUser, function(err) {
+            if (err) { return next(err); }
+            return res.redirect('/users/' + req.user.username);
+          });
+        
     }
     
     res.redirect('/bids/all')
@@ -42,7 +52,7 @@ route.post('/login', passport.authenticate('local', {
     successFlash: true}), (req,res)=> {
 
      req.flash('success', 'successfully logged in , welcome back :)')
-        console.log(req.user)
+     
      res.redirect('/bids/all')
         
 

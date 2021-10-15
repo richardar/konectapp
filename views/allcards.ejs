@@ -1,0 +1,32 @@
+<%- layout('./boilerplate/main') %> 
+
+<% if (cards) { %>
+ 
+<% for( let i = 0; i < cards.length; i++ ) { %>
+
+    <div class="card mt-10">
+        <div class="row">
+            <div class="col-3">
+      <img class="card-img" src="<%= cards[i].image %> " alt="">
+    </div>
+    <div class="col-8 align-center">
+      <div class="card-body">
+        <h4 class="card-title"><%=  cards[i].name %> </h4>
+        <p class="card-text"> <%=   cards[i].experience %> years of experience</p>
+        <p class="card-text"><%= cards[i].location %> </p>
+        <p class="card-text"><%= cards[i].specilization %> </p>
+        <p class="card-text"><%= cards[i].contact %> </p>
+        <p class="card-text"><%= cards[i].email %> </p>
+        <a href="/cards/<%= cards[i]._id %>" class="btn btn-primary btn-lg mt-5" >see more</a>
+    </div>
+    </div>
+    </div>
+    </div>
+
+
+
+<% } %>
+
+
+
+<% } %>

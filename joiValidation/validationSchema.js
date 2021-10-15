@@ -11,4 +11,26 @@ module.exports.formValidation = joi.object({
     image: joi.string().required()
 
 
-})
+}).required()
+
+
+module.exports.cardsValidation = joi.object({
+
+
+name: joi.string().required(),
+age: joi.string().required(),
+experience: joi.number().required(),
+loation: joi.string().required(),
+image: joi.string().required(),
+contact: joi.string().required(),
+email : joi.string().required()
+
+}).required()
+
+
+
+module.exports.reviewValidation = joi.object({
+
+    rating : joi.number().required(),
+    review : joi.string().required()
+}).required()

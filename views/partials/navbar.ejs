@@ -18,7 +18,10 @@
           <li class="nav-item">
             <a class="nav-link" href="/bids/new">new bid</a>
           </li>
-          <% if (isUser && isUser.isProfessional) { %>
+          <li class="nav-item">
+            <a class="nav-link" href="/cards">find contact info</a>
+          </li>
+          <% if (isUser && isUser.isProfessional && !isUser.isCardCreated) { %>
             <li class="nav-item">
               <a class="nav-link" href="/cards/new">Create a card</a>
             </li>

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
-
+const Review = require('./Reviews')
+ 
 
 
 
@@ -11,13 +12,17 @@ age : Number,
 
 expreience: Number,
 
+location:String,
+
+image: String,
+
 specilization: {
 
-    type:string,
-    enum: [electrician,plumber,mechanic,]
+    type:String,
+    enum: ['electrician','plumber','mechanic']
 },
 
-contactNumber: Number,
+contact: Number,
 email: String,
 reviews:[
     {
