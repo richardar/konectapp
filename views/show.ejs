@@ -10,7 +10,8 @@
           <p class="card-text"><%= bids.description %> </p>
         </div>
         <ul class="list-group list-group-flush">
-          <li class="list-group-item"><%= bids.specilization %> </li>
+         <li class="list-group-item">created by <%= bids.createdUser.username %> </li>
+            <li class="list-group-item"><%= bids.specilization %> </li>
           <li class="list-group-item"><%= bids.location %> </li>
           <li class="list-group-item">max price <%= bids.price %> </li>
         </ul>
@@ -42,7 +43,8 @@
     <% if (bids.highestBidder.highBidderName) { %>
         <div class="card" style="width: 18rem;">
             <div class="card-body">
-                <h5 class="card-title"><%= bids.highestBidder.highBidderName.username %> </h5>
+                <h5 class="card-title"><h1><a href="/cards/<%= bids.highestBidder.highBidderName.card %> " class="link-dark"><%= bids.highestBidder.highBidderName.username %> </a></h1></h5>
+                
                 <h5 class="card-title"><%= bids.highestBidder.highPrice %></h5>
       </div>
     <% } %>
@@ -77,7 +79,8 @@
             
            <div class="card">
                <ul>
-           <li class="list-group-item"> <%= bids.previousBidders[i].previousName.username %> </li>
+
+           <li class="list-group-item"><a href="/cards/<%= bids.previousBidders[i].previousName.card%>"> <%= bids.previousBidders[i].previousName.username %> </a></li>
            <li class="list-group-item"> <%= bids.previousBidders[i].previousPrice %> </li>
         </ul>
         <% } %> 

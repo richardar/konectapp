@@ -4,12 +4,16 @@ const mongoose = require('mongoose')
 
 
 
+
 const userSchema = new mongoose.Schema({
 
     email: String,
-    isProfessional: Boolean,
-    isCardCreated: Boolean
-
+    isProfessional: {
+        type: Boolean,
+        enum:[true]
+    },
+    isCardCreated: Boolean,
+    card : mongoose.Schema.Types.ObjectId
 
 })
 

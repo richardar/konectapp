@@ -2,28 +2,31 @@
 
 
 
-<form action="/cards/new" method="post">
+<form action="/cards/new" method="post" class="needs-validation" novalidate>
 
 <label for="name" class="form-label">name</label>
-<input type="text" name="name" id="name" class="form-control">
+<input type="text" name="name" id="name" class="form-control" required>
 <label for="age" class="form-label">age</label>
-<input type="text" name="age" id="age" class="form-control">
+<input type="text" name="age" id="age" class="form-control" required>
 <label for="experience" class="form-label">experience</label>
-<input type="text" name="experience" id="experience" class="form-control">
+<input type="text" name="experience" id="experience" class="form-control" required>
 <label for="location" class="form-label">location</label>
-<input type="text" name="location" id="location" class="form-control">
+<input type="text" name="location" id="location" class="form-control" required>
 <label for="image" class="form-label">image</label>
-<input type="text" name="image" id="image" class="form-control">
+<input type="text" name="image" id="image" class="form-control" required>
 <label for="specilization">specilization</label>
-<select id="specilization" name="specilization" class="form-control">
+<select id="specilization" name="specilization" class="form-control" required>
     <option value="electrician">electrician</option>
     <option value="plumber">plumber</option>
     <option value="mechanic">mechanic</option>
   </select>
 <label for="contact" class="form-label">contact number</label>
-<input type="number" name="contact" id="contact" class="form-control">
+<input type="number" name="contact" id="contact" class="form-control" required>
 <label for="email">email</label>
-<input type="email" name="email" id="email" class="form-control">
+<input type="email" name="email" id="email" class="form-control" required>
 <button class="btn btn-success mt-3">submit</button>
 
 </form>
+
+
+<script src="/bootstrapvalidation.js"></script>

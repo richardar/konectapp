@@ -39,6 +39,50 @@ const isloggedin = (req,res,next) => {
     }
 }
 
+const isBidCreator = async (req,res,next) => {
+
+    const id = req.params.id
+    const bids = await Bid.findById(id)
+
+    BidUserId = bids.createdUser._id
+    currentUserId = req.user._id
+    if(JSON.stringify(BidUserId) == JSON.stringify(currentUserId)){
+
+        next()
+        
+    } else {
+
+        req.flash('error','sorry you are not authorized to do this :(')
+        res.redirect('/bids/all')
+    }
+
+}
+
+const ispro = (req,res,next) => {
+
+
+    if(req.user.isProfessional){
+
+        next()
+        
+    } else{
+        req.flash('error', 'sorry you are not a professional.')
+        res.redirect('/cards')
+    }
+}
+
+const isCardCreated = (req,res,next) => {
+
+    if(req.user.isCardCreated){
+
+        next()
+
+    } else{
+
+        req.flash('error','you want to create your card first')
+    }
+
+}
 
 route.get('/open', async (req,res,next) => {
     try {
@@ -89,7 +133,6 @@ route.get('/:id' , async (req,res) => {
 
     const id = req.params.id;
     const bids = await Bid.findById(id).populate('createdUser').populate('highestBidder.highBidderName').populate('previousBidders.previousName')
-    console.log(bids)
 
    res.render('show', {bids})
 })
@@ -103,13 +146,13 @@ res.redirect('/bids/all')
 })
 
 
-route.get('/:id/edit', async (req,res) => {
+route.get('/:id/edit',isloggedin,isBidCreator, async (req,res) => {
     const id = req.params.id;
     const bids = await Bid.findById(id)
 
     res.render('edit',{bids})
 })
-route.put('/:id/edit', formValidate,async (req,res) => {
+route.put('/:id/edit',formValidate,isloggedin,isBidCreator,async (req,res) => {
 
     const id = req.params.id;
     console.log(req.body)
@@ -121,7 +164,7 @@ route.put('/:id/edit', formValidate,async (req,res) => {
 })
 
 
-route.post('/:id/submitbid',isloggedin, async (req,res) => {
+route.post('/:id/submitbid',isloggedin,ispro,isCardCreated, async (req,res) => {
     
     const {id} = req.params
 
@@ -138,7 +181,6 @@ if(bids.highestBidder.highBidderName){
     bids.highestBidder.highPrice = req.body.highPrice
      
     bids.previousBidders.push({previousName,previousPrice})
-    console.log('if worked')
     await bids.save()
     res.redirect(`/bids/${bids._id}`)
  
@@ -148,7 +190,6 @@ if(bids.highestBidder.highBidderName){
    bids.highestBidder.highBidderName = req.user._id
     bids.highestBidder.highPrice = req.body.highPrice
    await bids.save()
-   console.log('else worked')
    res.redirect(`/bids/${bids._id}`)
     
 
@@ -157,7 +198,7 @@ if(bids.highestBidder.highBidderName){
 })
 
 
-route.post('/:id/closebid',isloggedin,async (req,res) => {
+route.post('/:id/closebid',isloggedin,isBidCreator,async (req,res) => {
 
     const id = req.params.id
     const bids = await Bid.findById(id)

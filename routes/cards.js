@@ -6,6 +6,8 @@ const Review = require('../models/Reviews')
 const {cardsValidation} = require('../joiValidation/validationSchema')
 const flash = require('express-flash')
 const { userRouter } = require('./users')
+const cards = require('../models/cards')
+const User = require('../models/Users')
 
 
 
@@ -36,7 +38,40 @@ const cardvalidator = (req,res,next) => {
     }
 }
 
+const ispro = (req,res,next) => {
 
+
+    if(req.user.isProfessional){
+
+        next()
+        
+    } else{
+        req.flash('error', 'sorry you are not a professional.')
+        res.redirect('/cards')
+    }
+
+
+}
+
+const isCardCreator =  async (req,res,next) => {
+
+ const {id} = req.params
+ const cards = await Card.findById(id)
+ const originalUserId = cards.user._id
+
+ const nowUserId = req.user._id
+
+ if(JSON.stringify(originalUserId) == JSON.stringify(nowUserId)){
+
+    next()
+ }
+else{
+
+    req.flash('error', 'you are not the orignial creator')
+    res.redirect('/cards')
+}
+
+}
 
 route.get('/test' , (req,res)  => {
 
@@ -49,16 +84,21 @@ route.get('/', async (req,res) => {
     res.render('allcards',{cards})
 })
 
-route.get('/new', (req,res) =>{
+route.get('/new',isloggedin,ispro, (req,res) =>{
 
 res.render('newcard')
 
 })
 
-route.post('/new',cardvalidator,async (req,res) => {
+route.post('/new',isloggedin,cardvalidator,ispro,async (req,res) => {
 
     const body = req.body
-    cards = new Card(body)
+  const cards = new Card(body)
+    cards.user = req.user._id
+    const user1 = await User.findById(req.user._id)
+    user1.isCardCreated = true
+    user1.card = cards._id
+    await user1.save()
     await cards.save()
 
   res.redirect('/cards/')  
@@ -82,15 +122,24 @@ res.render('showcard',{cards})
 })
 
 
-route.delete('/:id', async (req,res,next) => {
+route.delete('/:id',isloggedin,ispro,isCardCreator,async (req,res,next) => {
 
     const {id} = req.params
-    cards = await Card.findByIdAndDelete(id)
+    cards = await Card.findById(id)
+    reviewArray = cards.reviews
+    for (let i = 0; i < reviewArray.length; i++) {
+      await  Review.findByIdAndDelete(reviewArray[i])
+        
+    }
+    await Card.findByIdAndDelete(id)
+    const user = await User.findById(req.user._id)
+    user.isCardCreated = false
+        req.flash('success', 'successfully deleted the your card')
      res.redirect('/bids/all')
   
 
 })
-route.get('/:id/edit', async (req,res,next) => {
+route.get('/:id/edit',isloggedin,ispro,isCardCreator, async (req,res,next) => {
     const {id} = req.params
     const cards = await Card.findById(id)
 res.render('cardedit', {cards})
@@ -98,7 +147,7 @@ res.render('cardedit', {cards})
 })
 
 
-route.put('/:id/edit',cardvalidator, async (req,res,next) => {
+route.put('/:id/edit',cardvalidator,isloggedin,ispro,isCardCreator, async (req,res,next) => {
 
 
     const {id} = req.params

@@ -28,10 +28,10 @@
         <div class="col-3">
             <div style="height: 100px; width: 20rem" class="card">
                 <h3 class="card-title">enter rating and review</h3>
-            <form action="/cards/<%= cards._id %>/reviewnew" method="post">
-                <input type="range" name="rating" id="rating" min="1" max="5">
+            <form action="/cards/<%= cards._id %>/reviewnew" method="post" class="needs-validation" novalidate>
+                <input type="range" name="rating" id="rating" min="1" max="5" required>
                 <label for="review">review</label>
-                <input type="text" name="review" id="review" class="form-control">
+                <input type="text" name="review" id="review" class="form-control" required>
                 <button>submit</button>
             </form>
             
@@ -51,7 +51,7 @@
         
     </div>
 
-
+<script src="/bootstrapvalidation.js"></script>
     
 
     

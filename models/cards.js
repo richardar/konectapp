@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const Review = require('./Reviews')
+const User   = require('./Users')
  
 
 
@@ -10,7 +11,7 @@ name: String,
 
 age : Number,
 
-expreience: Number,
+experience: Number,
 
 location:String,
 
@@ -29,7 +30,12 @@ reviews:[
         type: mongoose.Schema.Types.ObjectId,
         ref: Review
     }
-]
+],
+
+user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: User
+}
 
 })
 
