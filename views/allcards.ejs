@@ -1,23 +1,43 @@
 <%- layout('./boilerplate/main') %> 
 
+
+
+
+
+<link rel="stylesheet" href="/searchbar.css">
+
+<form class="search-container d-flex justify-content-center" action="/bids/all" >
+  
+  <div class="input-group col-sm-7 input-group-lg">
+      <div class="input-group-prepend"> <span class="input-group-text google"><img src="https://img.icons8.com/color/48/000000/google-logo.png"></span> </div> <input type="text" name="search" placeholder="search for a bid" class="form-control" >
+      <div class="input-group-append"> <span class="input-group-text microphone"><button class="btn bg-transparent"><i class="fas fa-search fa-2x"></i></button></span> </div>
+  </div>
+
+</form>
+
 <% if (cards) { %>
  
 <% for( let i = 0; i < cards.length; i++ ) { %>
 
-    <div class="card mt-10">
+    <div class="card shadow" style="margin-top: 20px;border-radius: 10px;">
         <div class="row">
-            <div class="col-3">
-      <img class="card-img" src="<%= cards[i].image %> " alt="">
+            <div class="col-3 d-flex align-items-center" style="margin-left: 5px; margin:5px ; ">
+              <% if (cards[i].image[0].url) { %>
+                <img class="card-img-top" src="<%= cards[i].image[0].url %> " alt="" style="border-radius: 10px; height: 100%;">
+              <% } else {%>
+                <i class="far fa-image text-justify"></i>
+              <% } %> 
+    
     </div>
     <div class="col-8 align-center">
       <div class="card-body">
         <h4 class="card-title"><%=  cards[i].name %> </h4>
-        <p class="card-text"> <%=   cards[i].experience %> years of experience</p>
-        <p class="card-text"><%= cards[i].location %> </p>
-        <p class="card-text"><%= cards[i].specilization %> </p>
-        <p class="card-text"><%= cards[i].contact %> </p>
-        <p class="card-text"><%= cards[i].email %> </p>
-        <a href="/cards/<%= cards[i]._id %>" class="btn btn-primary btn-lg mt-5" >see more</a>
+        <p class="card-text text-muted"><%=   cards[i].experience %> years of experience</p>
+        <p class="card-text"><i class="fas fa-map-marker-alt"></i> <%= cards[i].location %> </p>
+        <p class="card-text"><i class="fas fa-tools"></i> <%= cards[i].specilization %> </p>
+        <p class="card-text"><i class="fas fa-phone-alt"></i> <%= cards[i].contact %> </p>
+        <p class="card-text"><i class="fas fa-envelope-open-text"></i> <%= cards[i].email %> </p>
+        <a href="/cards/<%= cards[i]._id %>" class="btn btn-primary btn-lg mt-5" >see details</a>
     </div>
     </div>
     </div>

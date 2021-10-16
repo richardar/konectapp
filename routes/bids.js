@@ -86,6 +86,7 @@ const isCardCreated = (req,res,next) => {
     } else{
 
         req.flash('error','you want to create your card first')
+        res.redirect('/cards/new')
     }
 
 }

@@ -1,22 +1,45 @@
 <%- layout('./boilerplate/main') %> 
 
+<h1 class="mapheading" style="margin-left: 10px; opacity: 0.2; ">All bids</h1>
+<div id="map" style="height: 450px; width: 100%; border-radius: 20px;margin-top: 20px; "></div>
 
-<% for( let i = 0; i < bids.length; i++ ) { %>
+<link rel="stylesheet" href="/searchbar.css">
 
-      <div class="card mt-10">
-        <div class="row">
-            <div class="col-3">
-      <img class="card-img" src="<%= bids[i].image %> " alt="">
+<form class="search-container d-flex justify-content-center" action="/bids/all" >
+  
+  <div class="input-group col-sm-7 input-group-lg">
+      <div class="input-group-prepend"> <span class="input-group-text google"><img src="https://img.icons8.com/color/48/000000/google-logo.png"></span> </div> <input type="text" name="search" placeholder="search for a bid" class="form-control" >
+      <div class="input-group-append"> <span class="input-group-text microphone"><button class="btn bg-transparent"><i class="fas fa-search fa-2x"></i></button></span> </div>
+  </div>
+
+</form>
+
+<hr>
+    <div class="row " style="margin-top: 75px;">
+      
+      <% for( let i = 0; i < bids.length; i++ ) { %>
+
+        <div class="col-3" >
+        <div class="card shadow" style="width: 18rem; border-radius: 10px; margin-top: 20px;margin-bottom: 20px ;">
+          <div style="padding: 10px; border-radius: 20px">
+          <img class="card-img-top"  src="<%= bids[i].image[0].url %>" alt="Card image cap" style="height: 200px;border-radius: 10px;">
+        </div>
+          <div class="card-body">
+            <h5 class="card-title"> <%= bids[i].name %></h5>
+            <div class="card-text mb-3 text-muted"><i class="fas fa-tools"></i> <%= bids[i].specilization %> </div>
+            <div class="card-text mb-3 "><i class="fas fa-map-marker-alt"></i> <%= bids[i].location %> </div>
+            
+
+            <% if (bids[i].highestBidder.highBidderName) { %>
+              <a href="/bids/<%= bids[i]._id %>" class="btn btn-primary"><i class="fas fa-gavel"></i> <%= bids[i].highestBidder.highPrice %> </a>
+              
+            <% } else {%>
+            <a href="/bids/<%= bids[i]._id %>" class="btn btn-primary" style="border-radius: 5px;"><i class="fas fa-rupee-sign"></i> <%= bids[i].price %></a>
+            
+            <% } %> 
+          </div>
+        </div>
+      </div>
+        <% } %> 
     </div>
-    <div class="col-8 align-center">
-      <div class="card-body">
-        <h4 class="card-title"><%=  bids[i].name %> </h4>
-        <p class="card-text"> <%=   bids[i].description %></p>
-        <p class="card-text"><%= bids[i].location %> </p>
-        <a href="/bids/<%= bids[i]._id %>" class="btn btn-primary btn-lg mt-5" >current bid : <%= bids[i].price %> </a>
-    </div>
-    </div>
-    </div>
-    </div>
-    <% } %>
-    
+    <script src="/cluster.js"></script>
