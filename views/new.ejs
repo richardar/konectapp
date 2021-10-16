@@ -1,6 +1,6 @@
 <%- layout('./boilerplate/main') %> 
 
-<form action="/bids/new" method="post" class="needs-validation" novalidate>
+<form action="/bids/new" method="post" class="needs-validation" novalidate enctype="multipart/form-data">
 
 <label for="name" class="form-label">name</label>
 <input type="text" name="name" id="name" class="form-control" required>
@@ -15,7 +15,7 @@
     <option value="mechanic">mechanic</option>
   </select>
 <label for="image" class="form-label">image</label>
-<input type="text" name="image" id="image" class="form-control" required>
+<input type="file" name="image" id="image" class="form-control" multiple>
 <label for="description" class="form-label">description</label>
 <textarea name="description" id="description" cols="30" rows="10" class="form-control" required></textarea>
 <button class="btn btn-primary mt-3">submit</button>

@@ -6,6 +6,12 @@ const mongoose = require('mongoose')
 const route = express.Router()
 const {formValidation,cardsValidation} = require('../joiValidation/validationSchema')
 const flash = require('express-flash')
+const multer  = require('multer')
+const {cloudinary,storage} = require('../cloudinary/index')
+const upload = multer({ storage })
+const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
+const mapBoxToken = process.env.MAPTOKEN;
+const geocoder = mbxGeocoding({ accessToken: mapBoxToken })
 
 
 
@@ -116,11 +122,22 @@ route.get('/new',isloggedin, (req,res) => {
     res.render('new')
 })
 
-route.post('/new',formValidate,isloggedin, async (req,res) => {
+route.post('/new',isloggedin,upload.array('image'),formValidate, async (req,res) => {
+
+    const geoData = await geocoder.forwardGeocode({
+        query: req.body.location,
+        limit: 1
+    }).send()
+
+
+
     const body = req.body;
 
     const bids = new Bid(req.body)
     bids.createdUser = req.user
+   const image = req.files.map(f => ({ url: f.path, filename: f.filename }));
+   bids.geometry = geoData.body.features[0].geometry;
+   bids.image = image
    await bids.save()
    req.flash('success','successfully created a new bidding.')
     res.redirect(`/bids/${bids._id}`)

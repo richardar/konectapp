@@ -7,7 +7,22 @@ const bidSchema = new mongoose.Schema({
     description: String,
     location: String,
     specilization: String,
-    image: String,
+    image: [{
+      url:String,
+      filename: String
+  }],
+
+  geometry: {
+    type: {
+        type: String,
+        enum: ['Point'],
+        required: true
+    },
+    coordinates: {
+        type: [Number],
+        required: true
+    }
+},
     createdUser: {
       type: mongoose.Schema.Types.ObjectId,
       ref: User

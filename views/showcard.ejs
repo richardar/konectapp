@@ -5,7 +5,8 @@
     <div class="row">
         <div class="col-6 offset-3">
             <div class="card" style="width: 30rem;">
-                <img src="<%= cards.image %> " class="card-img-top" alt="...">
+                <div id='map' style="width: 30rem; height: 30rem" ></div>
+                <img src="<%= cards.image[0].url %> " class="card-img-top" alt="...">
                 <div class="card-body">
                   <h5 class="card-title"><%= cards.name %> </h5>
                 </div>
@@ -15,14 +16,18 @@
                   <li class="list-group-item"><%= cards.contact %> </li>
                   <li class="list-group-item"><%= cards.email %> </li>
                 </ul>
-                <div class="card-body">
-                    <form action="/cards/<%= cards._id %>/?_method=DELETE" method="post" class="d-inline">
-                    <button class="btn btn-danger btn-sm">delete</button>
-                    </form>
-                    <form action="/cards/<%= cards._id %>/edit" class="d-inline">
-                        <button class="btn btn-warning btn-sm">edit</button>
+
+                <% if (isUser && JSON.stringify(isUser._id) == JSON.stringify(cards.user)) { %>
+                    <div class="card-body">
+                        <form action="/cards/<%= cards._id %>/?_method=DELETE" method="post" class="d-inline">
+                        <button class="btn btn-danger btn-sm">delete</button>
                         </form>
-                </div>
+                        <form action="/cards/<%= cards._id %>/edit" class="d-inline">
+                            <button class="btn btn-warning btn-sm">edit</button>
+                            </form>
+                    </div>
+                <% } %>
+                
               </div>        
         </div>
         <div class="col-3">
@@ -42,9 +47,12 @@
                 <h3> <%=  cards.reviews[i].rating %> </h3>
                 <p><%=cards.reviews[i].review  %>  </p>
                 <p>posted by <%= cards.reviews[i].user.username %> </p>
+                <% if (isUser && JSON.stringify(cards.reviews[i].user._id) == JSON.stringify(isUser._id)) { %>
+
                 <form action="/cards/<%= cards._id %>/review/<%= cards.reviews[i]._id%>/?_method=DELETE" class="d-inline" method="post">
                 <button class="btn btn-danger btn-sm">delete</button>
                 </form>
+                <% } %> 
             </div>
             <% } %>
         </div>
@@ -53,6 +61,29 @@
 
 <script src="/bootstrapvalidation.js"></script>
     
+
+<script>
+    mapboxgl.accessToken = '<%- process.env.MAPTOKEN %>';
+        const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v9', // stylesheet location
+            center:[<%= cards.geometry.coordinates %>], // starting position [lng, lat]
+            zoom: 10 // starting zoom
+        });
+        
+        map.addControl(new mapboxgl.NavigationControl());
+        
+        
+        new mapboxgl.Marker()
+            .setLngLat([<%= cards.geometry.coordinates %>])
+            .setPopup(
+                new mapboxgl.Popup({ offset: 25 })
+                
+                    
+            )
+            .addTo(map)
+        
+        </script>
 
     
 

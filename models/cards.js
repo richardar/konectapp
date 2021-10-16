@@ -15,11 +15,25 @@ experience: Number,
 
 location:String,
 
-image: String,
+image: [{
+    url:String,
+    path: String
+}],
+geometry: {
+    type: {
+        type: String,
+        enum: ['Point'],
+        required: true
+    },
+    coordinates: {
+        type: [Number],
+        required: true
+    }
+},
 
 specilization: {
 
-    type:String,
+    type:String, 
     enum: ['electrician','plumber','mechanic']
 },
 

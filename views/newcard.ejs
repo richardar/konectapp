@@ -2,7 +2,7 @@
 
 
 
-<form action="/cards/new" method="post" class="needs-validation" novalidate>
+<form action="/cards/new" method="post" class="needs-validation" novalidate enctype="multipart/form-data">
 
 <label for="name" class="form-label">name</label>
 <input type="text" name="name" id="name" class="form-control" required>
@@ -13,7 +13,7 @@
 <label for="location" class="form-label">location</label>
 <input type="text" name="location" id="location" class="form-control" required>
 <label for="image" class="form-label">image</label>
-<input type="text" name="image" id="image" class="form-control" required>
+<input type="file" name="image" id="image" class="form-control" required>
 <label for="specilization">specilization</label>
 <select id="specilization" name="specilization" class="form-control" required>
     <option value="electrician">electrician</option>

@@ -1,17 +1,46 @@
 const express = require('express')
 const User = require('../models/Users')
 const passport = require('passport')
+const {registerValidation,loginValidation} = require('../joiValidation/validationSchema')
+const appError = require('../utils/appError')
 
 const route = express.Router()
 
+const registerValidate = (req,res,next) => {
 
+    const {error} = registerValidation.validate(req.body)
+    if(error){
+        const msg = error.details.map(el => el.message)
+        next(new appError(msg, 404))
+    
+    
+       }else{
+           next()
+       }
+
+}
+
+const loginValidate = (req,res,next) => {
+
+
+    const {error} = loginValidation.validate(req.body)
+
+    if(error){
+        const msg = error.details.map(el => el.message)
+        next(new appError(msg, 404))
+    
+    
+       }else{
+           next()
+       }
+}
 
 route.get('/register',  (req,res) => {
     res.render('register')
 
 })
 
-route.post('/register',async (req,res) => {
+route.post('/register',registerValidate,async (req,res) => {
 
 
     
@@ -22,7 +51,7 @@ route.post('/register',async (req,res) => {
         const registeredUser = await  User.register(usr,password)
         req.login(registeredUser, function(err) {
             if (err) { return next(err); }
-            return res.redirect('/users/' + req.user.username);
+            return res.redirect('/bids/all');
           });
         
     }
@@ -31,12 +60,12 @@ route.post('/register',async (req,res) => {
         const registeredUser = await User.register(usr,password)
         req.login(registeredUser, function(err) {
             if (err) { return next(err); }
-            return res.redirect('/users/' + req.user.username);
+            return res.redirect('/bids/all');
           });
         
     }
     
-    res.redirect('/bids/all')
+    
 
 
 })

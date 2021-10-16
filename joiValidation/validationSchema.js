@@ -8,7 +8,7 @@ module.exports.formValidation = joi.object({
     description: joi.string().required(),
     location: joi.string().required(),
     specilization: joi.string().required(),
-    image: joi.string().required()
+    // image: joi.string().required()
 
 
 }).required()
@@ -21,7 +21,6 @@ name: joi.string().required(),
 age: joi.string().required(),
 experience: joi.number().required(),
 location: joi.string().required(),
-image: joi.string().required(),
 contact: joi.string().required(),
 specilization: joi.string().required(),
 
@@ -36,3 +35,18 @@ module.exports.reviewValidation = joi.object({
     rating : joi.number().required(),
     review : joi.string().required()
 }).required()
+module.exports.registerValidation = joi.object({
+
+username: joi.string().required(),
+password: joi.string().required(),
+email: joi.string().required(),
+isProfessional: joi.string()
+
+}).required()
+
+module.exports.loginValidation = joi.object({
+
+    username: joi.string().required(),
+    password: joi.string().required()
+
+})
