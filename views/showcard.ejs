@@ -1,20 +1,23 @@
 <%- layout('./boilerplate/main') %> 
 
 
-<%= cards.name %>
+<link rel="stylesheet" href="/starability.css">
+
+
+
     <div class="row">
-        <div class="col-6 offset-3">
-            <div class="card" style="width: 30rem;">
-                <div id='map' style="width: 30rem; height: 30rem" ></div>
-                <img src="<%= cards.image[0].url %> " class="card-img-top" alt="...">
+        <div class="col-6">
+            <div class="card" style="width: 500px; margin-left: 100px;">
+                
+                <img src="<%= cards.image[0].url %> " class="card-img-top" style="height: 450px;" alt="...">
                 <div class="card-body">
                   <h5 class="card-title"><%= cards.name %> </h5>
                 </div>
                 <ul class="list-group list-group-flush">
-                  <li class="list-group-item"><%= cards.experience %> years </li>
-                  <li class="list-group-item"><%= cards.specilization %> </li>
-                  <li class="list-group-item"><%= cards.contact %> </li>
-                  <li class="list-group-item"><%= cards.email %> </li>
+                  <li class="list-group-item"><i class="fas fa-brain"></i>  <%= cards.experience %> years experience</li>
+                  <li class="list-group-item"><i class="fas fa-tools"></i>  <%= cards.specilization %> </li>
+                  <li class="list-group-item"><i class="fas fa-phone"></i>  <%= cards.contact %> </li>
+                  <li class="list-group-item"><i class="fas fa-envelope-open"></i>  <%= cards.email %> </li>
                 </ul>
 
                 <% if (isUser && JSON.stringify(isUser._id) == JSON.stringify(cards.user)) { %>
@@ -28,36 +31,97 @@
                     </div>
                 <% } %>
                 
-              </div>        
+              </div> 
         </div>
-        <div class="col-3">
-            <div style="height: 100px; width: 20rem" class="card">
+
+        <div class="col-4" >
+            <div id='map' style="width: 30rem; height: 30rem; border-radius: 10px;" ></div>
+            <div style="height: 250px; width: 480px; padding: 10px;" class="card">
                 <h3 class="card-title">enter rating and review</h3>
             <form action="/cards/<%= cards._id %>/reviewnew" method="post" class="needs-validation" novalidate>
-                <input type="range" name="rating" id="rating" min="1" max="5" required>
-                <label for="review">review</label>
-                <input type="text" name="review" id="review" class="form-control" required>
-                <button>submit</button>
+                <fieldset class="starability-fade" style="text-align: center;">
+                    <input type="radio" id="no-rate" class="input-no-rate" name="rating" value="0" checked aria-label="No rating." />
+                    <input type="radio" id="first-rate1" name="rating" value="1" />
+                    <label for="first-rate1" title="Terrible">1 star</label>
+                    <input type="radio" id="first-rate2" name="rating" value="2" />
+                    <label for="first-rate2" title="Not good">2 stars</label>
+                    <input type="radio" id="first-rate3" name="rating" value="3" />
+                    <label for="first-rate3" title="Average">3 stars</label>
+                    <input type="radio" id="first-rate4" name="rating" value="4" />
+                    <label for="first-rate4" title="Very good">4 stars</label>
+                    <input type="radio" id="first-rate5" name="rating" value="5" />
+                    <label for="first-rate5" title="Amazing">5 stars</label>
+                  </fieldset>
+                <textarea type="text" name="review" id="review" class="form-control" required></textarea>
+                <button class="btn btn-success btn-sm mt-3" style="text-align: left;">submit</button>
             </form>
             
             </div>
 
-            <% for( let i = 0; i < cards.reviews.length; i++ ) { %>
-            <div class="card">
-                <h3> <%=  cards.reviews[i].rating %> </h3>
-                <p><%=cards.reviews[i].review  %>  </p>
-                <p>posted by <%= cards.reviews[i].user.username %> </p>
-                <% if (isUser && JSON.stringify(cards.reviews[i].user._id) == JSON.stringify(isUser._id)) { %>
-
-                <form action="/cards/<%= cards._id %>/review/<%= cards.reviews[i]._id%>/?_method=DELETE" class="d-inline" method="post">
-                <button class="btn btn-danger btn-sm">delete</button>
-                </form>
-                <% } %> 
-            </div>
-            <% } %>
-        </div>
+            <% if (cards.reviews.length) { %>
+                <h3 style="text-align: center; margin-top: 20px">see what others say</h3>
+                <div class="card" style="text-align: center; padding:10px ; width: 480px;">
+                <% for( let i = 0; i < cards.reviews.length; i++ ) { %>
+                    
+                    <table>
+                        <tr><td>
+                            <p>posted by:</p>
+                        </td>
+                    <td>
+                        <p style="text-align: left;"><%= cards.reviews[i].user.username %> </p>
+                    </td>
+                </tr>
+                        <tr>
+                            <td>
+                                rating:
+                            </td>
+                            <td>
+                                <p style="text-align: left;" class="starability-result" data-rating="<%=cards.reviews[i].rating %>">
+                                    Rated: <%=cards.reviews[i].rating  %> stars
+                                  </p>
+                                
+                            </td>
+                        </tr>
+                        <tr>
+                                <td>
+                                    review:
+                            </td>
+                            <td>
+                                <p style="text-align: left;"> <%=cards.reviews[i].review  %> </p>
+                            </td>
+                        </tr>
+                    </table>
+                        <% if (isUser && JSON.stringify(cards.reviews[i].user._id) == JSON.stringify(isUser._id)) { %>
         
+                        <form action="/cards/<%= cards._id %>/review/<%= cards.reviews[i]._id%>/?_method=DELETE" class="d-inline" method="post">
+                        <button class="btn btn-danger btn-sm">delete</button>
+                        </form>
+                        <% } %> 
+                        <hr>
+                    <% } %>
+                </div>
+            <% } %>
+
+          
+        </div>
+        </div>
     </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <script src="/bootstrapvalidation.js"></script>
     

@@ -46,8 +46,8 @@ const isloggedin = (req,res,next) => {
 }
 
 const isBidCreator = async (req,res,next) => {
-
-    const id = req.params.id
+    try {
+        const id = req.params.id
     const bids = await Bid.findById(id)
 
     BidUserId = bids.createdUser._id
@@ -61,6 +61,10 @@ const isBidCreator = async (req,res,next) => {
         req.flash('error','sorry you are not authorized to do this :(')
         res.redirect('/bids/all')
     }
+    } catch (error) {
+        next(new appError(error, 404))
+    }
+    
 
 }
 
@@ -125,66 +129,88 @@ route.get('/new',isloggedin, (req,res) => {
 
 route.post('/new',isloggedin,upload.array('image'),formValidate, async (req,res) => {
 
-    const geoData = await geocoder.forwardGeocode({
-        query: req.body.location,
-        limit: 1
-    }).send()
-
-
-
-    const body = req.body;
-
-    const bids = new Bid(req.body)
-    bids.createdUser = req.user
-   const image = req.files.map(f => ({ url: f.path, filename: f.filename }));
-   bids.geometry = geoData.body.features[0].geometry;
-   bids.image = image
-   await bids.save()
-   req.flash('success','successfully created a new bidding.')
-    res.redirect(`/bids/${bids._id}`)
-
-
-
+    try {
+        const geoData = await geocoder.forwardGeocode({
+            query: req.body.location,
+            limit: 1
+        }).send()
+    
+    
+    
+        const body = req.body;
+    
+        const bids = new Bid(req.body)
+        bids.createdUser = req.user
+       const image = req.files.map(f => ({ url: f.path, filename: f.filename }));
+       bids.geometry = geoData.body.features[0].geometry;
+       bids.image = image
+       await bids.save()
+       req.flash('success','successfully created a new bidding.')
+        res.redirect(`/bids/${bids._id}`)
+    
+    } catch (error) {
+        next (new appError(error, 404))
+    }
 })
 
 route.get('/:id' , async (req,res) => {
 
-    const id = req.params.id;
+    try {
+        const id = req.params.id;
     const bids = await Bid.findById(id).populate('createdUser').populate('highestBidder.highBidderName').populate('previousBidders.previousName')
 
    res.render('show', {bids})
+    } catch (error) {
+        next (new appError(error, 404))
+    }
+    
 })
 
 route.delete('/:id', async (req,res) => {
 
-    const id = req.params.id;
+    try {
+        const id = req.params.id;
     const bids = await Bid.findByIdAndDelete(id)
 res.redirect('/bids/all')
 
+    } catch (error) {
+     next(new appError(error, 404))   
+    }
+    
 })
 
 
 route.get('/:id/edit',isloggedin,isBidCreator, async (req,res) => {
-    const id = req.params.id;
+
+    try {
+        const id = req.params.id;
     const bids = await Bid.findById(id)
 
     res.render('edit',{bids})
+    } catch (error) {
+        next(new appError(error, 404))
+    }
+    
 })
 route.put('/:id/edit',formValidate,isloggedin,isBidCreator,async (req,res) => {
-
-    const id = req.params.id;
+    try {
+        const id = req.params.id;
     console.log(req.body)
     const bids = await Bid.findByIdAndUpdate(id,req.body)
     req.flash('success', 'successfully edited the campground')
     res.redirect(`/bids/${bids._id}`)
 
+    } catch (error) {
+        next(new appError(error, 404))
+    }
+    
 
 })
 
 
 route.post('/:id/submitbid',isloggedin,ispro,isCardCreated, async (req,res) => {
-    
-    const {id} = req.params
+    try {
+        const {id} = req.params
 
 const bids = await Bid.findById(id)
 
@@ -212,13 +238,18 @@ if(bids.highestBidder.highBidderName){
     
 
 }
+    } catch (error) {
+        next (new appError(error, 404))
+    }
+    
+    
 
 })
 
 
 route.post('/:id/closebid',isloggedin,isBidCreator,async (req,res) => {
-
-    const id = req.params.id
+    try {
+        const id = req.params.id
     const bids = await Bid.findById(id)
     await Bid.findByIdAndUpdate(id, { $set: { previousBidders: [] }})
 
@@ -227,6 +258,10 @@ route.post('/:id/closebid',isloggedin,isBidCreator,async (req,res) => {
     await bids.save()
     req.flash('success', 'bid successfully closed')
     res.redirect(`/bids/${id}`)
+    } catch (error) {
+        next(new appError(error , 404))
+    }
+    
     
 })
 

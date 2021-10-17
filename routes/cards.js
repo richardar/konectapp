@@ -19,7 +19,7 @@ const geocoder = mbxGeocoding({ accessToken: mapBoxToken })
 
 
 const cardvalidator = (req,res,next) => {
-
+try {
     const {error} = cardsValidation.validate(req.body)
     if(error){
      const msg = error.details.map(el => el.message)
@@ -29,10 +29,14 @@ const cardvalidator = (req,res,next) => {
     }else{
         next()
     }
+} catch (error) {
+    next(new appError(error, 404))
+}
+  
  }
 
  const isloggedin = (req,res,next) => {
-
+try {
     if (!req.isAuthenticated()){
 
         req.flash('error', 'you must be logged in')
@@ -42,10 +46,15 @@ const cardvalidator = (req,res,next) => {
     }else{
         next()
     }
+} catch (error) {
+    next(new appError(error, 404))
+}
+    
 }
 
 const ispro = (req,res,next) => {
-
+try {
+    
 
     if(req.user.isProfessional){
 
@@ -55,13 +64,17 @@ const ispro = (req,res,next) => {
         req.flash('error', 'sorry you are not a professional.')
         res.redirect('/cards')
     }
+} catch (error) {
+    next(new appError(error, 404))   
+}
 
 
 }
 
 const isCardCreator =  async (req,res,next) => {
 
- const {id} = req.params
+    try {
+        const {id} = req.params
  const cards = await Card.findById(id)
  const originalUserId = cards.user._id
 
@@ -76,25 +89,34 @@ else{
     req.flash('error', 'you are not the orignial creator')
     res.redirect('/cards')
 }
+    } catch (error) {
+        next(new appError(error, 404))
+    }
+
+ 
 
 }
 
 const isCardCreated = (req,res,next) => {
-
+try {
     if(!req.user.isCardCreated){
 
         next()
 
     } else{
-
         req.flash('error','you already created one card')
         res.redirect(`/cards/${req.user.card}`)
     }
+} catch (error) {
+    next(new appError(error, 404))
+}
+
+   
 
 }
 
 const isReviewCreator = async (req,res,next) => {
-
+try {
     const reviewId = req.params.reviewid
     const review = await Review.findById(reviewId)
     const currentUserId = req.user._id
@@ -108,6 +130,10 @@ const isReviewCreator = async (req,res,next) => {
         req.flash('error', 'you do not have permission to do that :(')
         res.redirect('/cards')
     }
+} catch (error) {
+    next(new appError(error, 404))
+}
+   
 
 }
 
@@ -129,24 +155,28 @@ res.render('newcard')
 })
 
 route.post('/new',isloggedin,upload.array('image'),cardvalidator,ispro,isCardCreated,async (req,res) => {
+    try {
+        const geoData = await geocoder.forwardGeocode({
+            query: req.body.location,
+            limit: 1
+        }).send()
+        const body = req.body
+      const cards = new Card(body)
+        cards.user = req.user._id
+        const user1 = await User.findById(req.user._id)
+        const image = req.files.map(f => ({ url: f.path, filename: f.filename }));
+        cards.geometry = geoData.body.features[0].geometry;
+        cards.image = image
+        user1.isCardCreated = true
+        user1.card = cards._id
+        await user1.save()
+        await cards.save()
     
-    const geoData = await geocoder.forwardGeocode({
-        query: req.body.location,
-        limit: 1
-    }).send()
-    const body = req.body
-  const cards = new Card(body)
-    cards.user = req.user._id
-    const user1 = await User.findById(req.user._id)
-    const image = req.files.map(f => ({ url: f.path, filename: f.filename }));
-    cards.geometry = geoData.body.features[0].geometry;
-    cards.image = image
-    user1.isCardCreated = true
-    user1.card = cards._id
-    await user1.save()
-    await cards.save()
-
-  res.redirect('/cards/')  
+      res.redirect('/cards/') 
+    } catch (error) {
+        next(new appError(error, 404))
+    }
+    
 })
 
 
@@ -168,7 +198,7 @@ res.render('showcard',{cards})
 
 
 route.delete('/:id',isloggedin,ispro,isCardCreator,async (req,res,next) => {
-
+try {
     const {id} = req.params
    const cards = await Card.findById(id)
     reviewArray = cards.reviews
@@ -184,28 +214,51 @@ route.delete('/:id',isloggedin,ispro,isCardCreator,async (req,res,next) => {
         req.flash('success', 'successfully deleted the your card')
      res.redirect('/bids/all')
   
+} catch (error) {
+    next(appError(error, 404))
+}
+    
 
 })
 route.get('/:id/edit',isloggedin,ispro,isCardCreator, async (req,res,next) => {
-    const {id} = req.params
+    try {
+        const {id} = req.params
     const cards = await Card.findById(id)
 res.render('cardedit', {cards})
+    } catch (error) {
+        next(new appError(error, 404))
+    }
+    
 
 })
 
 
 route.put('/:id/edit',cardvalidator,isloggedin,ispro,isCardCreator, async (req,res,next) => {
-
-
+try {
     const {id} = req.params
     body = req.body
     await Card.findByIdAndUpdate(id,body)
     res.redirect(`/cards/${id}/`)
+} catch (error) {
+    next(new appError(error, 404))   
+}
+
+ 
 })
 
-route.post('/:id/reviewnew',isloggedin,async (req,res) => {
 
-const {id} = req.params
+route.post('/fuzzy', async (req,res,next) => {
+
+    const cards = await Card.fuzzySearch(req.body.search)
+        res.render('cardsfuzzy',{cards})
+
+    
+})
+
+
+route.post('/:id/reviewnew',isloggedin,async (req,res) => {
+try {
+    const {id} = req.params
 
 const camp = await Card.findById(id)
 const review = new Review(req.body)
@@ -215,11 +268,15 @@ await review.save()
 await camp.save()
 res.redirect(`/cards/${id}`)
 
+} catch (error) {
+    next(new appError(message, 404))
+}
+
 })
 
 route.delete('/:id/review/:reviewid',isloggedin,isReviewCreator,async (req,res,next) => {
 
-
+try {
     const cardId = req.params.id
     const reviewId = req.params.reviewid
 
@@ -229,6 +286,10 @@ route.delete('/:id/review/:reviewid',isloggedin,isReviewCreator,async (req,res,n
     flash('success', 'successfully deleted the review')
     res.redirect(`/cards/${cardId}`)
 
+} catch (error) {
+    next( new appError(error, 404))
+}
+    
 
 })
 

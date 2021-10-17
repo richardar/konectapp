@@ -42,8 +42,7 @@ route.get('/register',  (req,res) => {
 
 route.post('/register',registerValidate,async (req,res) => {
 
-
-    
+try {
     const {email,username,password,isProfessional} = req.body
     if(isProfessional){
 
@@ -66,6 +65,11 @@ route.post('/register',registerValidate,async (req,res) => {
     }
     
     
+} catch (error) {
+    next(new appError(error, 404))
+}
+    
+
 
 
 })

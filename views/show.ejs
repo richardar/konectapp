@@ -49,10 +49,10 @@
               <p class="card-text"><%= bids.description %> </p>
             </div>
             <ul class="list-group list-group-flush">
-             <li class="list-group-item">created by <%= bids.createdUser.username %> </li>
-                <li class="list-group-item"><%= bids.specilization %> </li>
-              <li class="list-group-item"><%= bids.location %> </li>
-              <li class="list-group-item">max price <%= bids.price %> </li>
+             <li class="list-group-item"><i class="fas fa-user"></i> <%= bids.createdUser.username %> </li>
+                <li class="list-group-item"><i class="fas fa-tools"></i> <%= bids.specilization %> </li>
+              <li class="list-group-item"><i class="fas fa-map-marker-alt"></i> <%= bids.location %> </li>
+              <li class="list-group-item"><i class="fas fa-rupee-sign"></i> <%= bids.price %> max price </li>
             </ul>
             <% if (isUser && JSON.stringify(isUser._id) == JSON.stringify(bids.createdUser._id)) { %>
             <div class="card-body" style="text-align: center;">
@@ -85,8 +85,8 @@
                     <h2 class="card-title text-align"><%= bids.highestBidder.highPrice %></h2>
                 </div>
             <% } else {%>
-                <div class="card" style="height: 100%; width: 100%; text-align: center;">
-                <h1 class="card-title text-align">No ond bidded and the bidding ended</h1>
+                <div class="card" style="height: 50; width: 100%; text-align: center; padding: 10px;">
+                <h2 class="card-title text-align">No ond bidded and the bidding is closed</h2>
                 </div>
                 <% } %>   
                 <% if(bids.previousBidders.length) {%> 
@@ -145,14 +145,19 @@
                 <% } %>
                 
                 <% if(bids.previousBidders.length) {%> 
-                    <div class="card">
+                    <div class="card" style="padding: 5px;">
     
-                        <h5 class="card-title text-align">List of Previous Bidders</h5>
+                        <h5 class="card-title text-align" style="text-align: center;">List of Previous Bidders</h5>
                         <% for( let i = 0; i < bids.previousBidders.length; i++ ) { %>
-                            <li class="list-group-item"><i class="fas fa-user"></i> <a href="/cards/<%= bids.previousBidders[i].previousName.card%>"> <%= bids.previousBidders[i].previousName.username %> </a></li>
-               <li class="list-group-item"><i class="fas fa-rupee-sign"></i> <%= bids.previousBidders[i].previousPrice %> </li>
-                        <% } %> 
-                        <br>
+
+                            <table><tr>
+                                <td><i class="fas fa-user"></i> <a href="/cards/<%= bids.previousBidders[i].previousName.card%>"> <%= bids.previousBidders[i].previousName.username %> </a></td>
+                               
+                                <td><i class="fas fa-rupee-sign"></i> <%= bids.previousBidders[i].previousPrice %> </td>
+                            </tr></table>
+                            <hr> 
+               <% } %> 
+                        
                     </div>
                     <% } %> 
     

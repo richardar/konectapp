@@ -21,6 +21,7 @@ const localStatergy = require('passport-local')
 const User = require('./models/Users')
 const {userRouter} = require('./routes/users')
 const {cardsRouter} = require('./routes/cards')
+const mongoSanitize = require('express-mongo-sanitize')
 
 const app = express();
 
@@ -28,7 +29,7 @@ const app = express();
 app.use(methodOverride('_method'))
 
 // connection to mongoose
-mongoose.connect('mongodb://localhost:27017/konect').then(() => {
+mongoose.connect(process.env.MONGO).then(() => {
     console.log('connected to the mongodb')
 }).catch(() => {
     console.log('cannot open the connection to mongoose for some reason')
@@ -46,7 +47,9 @@ app.use(
   //flash configuration
   app.use(flash())
 
-  
+  //mongo sanitize
+  app.use(mongoSanitize());
+
 //passport configuration
 passport.use(new localStatergy(User.authenticate()))
 app.use(passport.initialize());
@@ -93,7 +96,7 @@ app.listen(3000, () => {
 
 app.get('/', (req,res) => {
 
-    res.send('not yet done')
+    res.render('home')
 })
 
 app.get('*', (req,res) => {
@@ -105,6 +108,6 @@ app.use((err,req,res,next)=> {
 
     const { statusCode = 500 } = err;
     if (!err.message) err.message = 'Oh No, Something Went Wrong!'
-    res.status(statusCode).render('error', { err })
+    res.status(statusCode).render('notfound', { err })
 
 })

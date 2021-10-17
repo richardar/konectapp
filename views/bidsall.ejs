@@ -20,8 +20,8 @@
       <% for( let i = 0; i < bids.length; i++ ) { %>
 
         <div class="col-3" >
-        <div class="card shadow" style="width: 18rem; border-radius: 10px; margin-top: 20px;margin-bottom: 20px ;">
-          <div style="padding: 10px; border-radius: 20px">
+        <div class="card shadow" style="width: 18rem; border-radius: 10px; margin-top: 20px;margin-bottom: 20px ; height: 435px;">
+          <div style="padding: 10px; border-radius: 20px"> 
           <img class="card-img-top"  src="<%= bids[i].image[0].url %>" alt="Card image cap" style="height: 200px;border-radius: 10px;">
         </div>
           <div class="card-body">
@@ -29,6 +29,8 @@
             <div class="card-text mb-3 text-muted"><i class="fas fa-tools"></i> <%= bids[i].specilization %> </div>
             <div class="card-text mb-3 "><i class="fas fa-map-marker-alt"></i> <%= bids[i].location %> </div>
             
+              <% if (!bids[i].isClosed) { %>
+ 
 
             <% if (bids[i].highestBidder.highBidderName) { %>
               <a href="/bids/<%= bids[i]._id %>" class="btn btn-primary"><i class="fas fa-gavel"></i> <%= bids[i].highestBidder.highPrice %> </a>
@@ -37,6 +39,18 @@
             <a href="/bids/<%= bids[i]._id %>" class="btn btn-primary" style="border-radius: 5px;"><i class="fas fa-rupee-sign"></i> <%= bids[i].price %></a>
             
             <% } %> 
+            <% } else { %>
+              <div class="card-text mb-3 " style="color: red;"><i class="fas fa-times"></i> Closed</div>
+              
+            <% if (bids[i].highestBidder.highBidderName) { %>
+              <a href="/bids/<%= bids[i]._id %>" class="btn btn-primary"><i class="fas fa-gavel"></i> <%= bids[i].highestBidder.highPrice %> </a>
+              
+            <% } else {%>
+            <a href="/bids/<%= bids[i]._id %>" class="btn btn-primary" style="border-radius: 5px;"><i class="fas fa-rupee-sign"></i> <%= bids[i].price %></a>
+            
+            <% } %>
+
+              <% } %> 
           </div>
         </div>
       </div>
