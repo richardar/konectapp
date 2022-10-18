@@ -90,7 +90,7 @@ app.use('/user', userRouter)
 app.use('/cards', cardsRouter)
 //listen to incoming connection
 
-app.listen(process.env.PORT, () => {
+app.listen( 3000, () => {
     console.log("started to listen on the port 3000")
 })
 
