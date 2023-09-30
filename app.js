@@ -38,7 +38,7 @@ mongoose.connect(process.env.MONGO).then(() => {
 //session configuration
 app.use(
     require("express-session")({
-      secret: "shibas are the best dogs in the world.",
+      secret: "I like the pyramids.",
       resave: false,
       saveUninitialized: false
     })
@@ -90,7 +90,7 @@ app.use('/user', userRouter)
 app.use('/cards', cardsRouter)
 //listen to incoming connection
 
-app.listen(process.env.PORT, () => {
+app.listen(process.env.PORT || 3000, () => {
     console.log("started to listen on the port 3000")
 })
 

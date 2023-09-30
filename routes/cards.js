@@ -34,6 +34,10 @@ try {
 }
   
  }
+ const isFunctionWorking = (req,res,next) =>{
+        console.log("this is working")
+        next
+ }
 
  const isloggedin = (req,res,next) => {
 try {
@@ -47,6 +51,7 @@ try {
         next()
     }
 } catch (error) {
+    console.log(error)
     next(new appError(error, 404))
 }
     
@@ -65,6 +70,7 @@ try {
         res.redirect('/cards')
     }
 } catch (error) {
+    console.log(error)
     next(new appError(error, 404))   
 }
 
@@ -90,6 +96,7 @@ else{
     res.redirect('/cards')
 }
     } catch (error) {
+        console.log(error)
         next(new appError(error, 404))
     }
 
@@ -154,7 +161,7 @@ res.render('newcard')
 
 })
 
-route.post('/new',isloggedin,upload.array('image'),cardvalidator,ispro,isCardCreated,async (req,res) => {
+route.post('/new',isloggedin,upload.array('image'),cardvalidator,ispro,isCardCreated, async(req,res) => {
     try {
         const geoData = await geocoder.forwardGeocode({
             query: req.body.location,
