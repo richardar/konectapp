@@ -70,7 +70,7 @@ next()
 
 //setting static file
 
-app.use(express.static('./public'))
+app.use(express.static(__dirname + "/public/"));
 
 //url parser
 app.use(express.urlencoded({extended: true}))
