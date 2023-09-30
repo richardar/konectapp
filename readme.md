@@ -13,6 +13,10 @@ The Konect app is a web-based platform designed to connect people with skilled p
 - **Bidding System:** Skilled professionals can view and bid on posted tasks, providing their quotes and proposed solutions.
 
 - **User Dashboard:** Users have a dashboard where they can manage their posted tasks, view bids, and communicate with professionals.
+![image](https://github.com/gratusrichard/konectapp/assets/78464961/a4be1518-19b0-4b90-9fd6-82c642ce91bd)
+![image](https://github.com/gratusrichard/konectapp/assets/78464961/4232ad5f-7878-4b2e-8be0-e9a31742ff53)
+![image](https://github.com/gratusrichard/konectapp/assets/78464961/e5c4dd90-6c0b-42fc-80a9-f4961eed6d4f)
+
 
 
 ## Installation
