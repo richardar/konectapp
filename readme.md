@@ -1,4 +1,3 @@
-```markdown
 # Konect App
 
 ## Introduction
@@ -86,4 +85,3 @@ This project is licensed under the [MIT License](LICENSE).
 
 
 Feel free to contribute to this project by submitting issues or pull requests.
-```
