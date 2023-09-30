@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const Review = require('./Reviews')
 const User   = require('./Users')
-const mongoose_fuzzy_searching = require('mongoose-fuzzy-searching')
+// const mongoose_fuzzy_searching = require('mongoose-fuzzy-searching')
   
 
 
@@ -53,7 +53,7 @@ user: {
 }
 
 })
-cardsSchema.plugin(mongoose_fuzzy_searching, { fields: ['location', 'specilization','name'] });
+// cardsSchema.plugin(mongoose_fuzzy_searching, { fields: ['location', 'specilization','name'] });
 
 
 
